@@ -20,6 +20,7 @@ app.use(devMiddleware)
 
 app.route('*').get( async (req, res, next) => {
   let data = await readDirList(req.query.path)
+  res.send(data)
 })
 
 app.listen(port, (err) => {
