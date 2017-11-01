@@ -1,23 +1,7 @@
 import React, { Component } from 'react'
-
-const Thead = () => (
-  <thead>
-    <tr>
-      <td>
-        <input type="checkbox" />
-      </td>
-      <td>
-        文件/目录名
-              </td>
-      <td>
-        大小
-              </td>
-      <td>
-        修改日期
-              </td>
-    </tr>
-  </thead>
-)
+import Thead from './container/Thead'
+import Paths from './components/Paths'
+import NameCmp from './components/NameCmp'
 
 class App extends Component {
   constructor(props) {
@@ -44,27 +28,15 @@ class App extends Component {
     } = this.state
     return (
       <section className="am-container">
-        <div className="am-form" >
-          <div class="am-form-group">
-            <input type="text" className="am-form-field" placeholder="输入目录" />
-          </div>
-          <div class="am-form-group">
-            <button className="am-btn am-btn-primary">确定</button>
-          </div>
-          <div class="am-form-group">
-            <input type="text" className="am-form-field" placeholder="输入新的文件名" />
-          </div>
-          <div class="am-form-group">
-            <button className="am-btn am-btn-warning">修改</button>
-          </div>
-        </div>
+        <Paths />
+        <NameCmp />
         <table className="am-table am-table-striped am-table-hover">
           <Thead />
           <tbody>
             {
               !!fileList.length && fileList.map(({ name, size, isDirectory, mtime }) => {
                 return (
-                  <tr>  
+                  <tr>
                     <td>
                       <input type="checkbox" />
                     </td>
