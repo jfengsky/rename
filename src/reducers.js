@@ -1,15 +1,14 @@
-import { CHANGE_PATH, change_path } from './action'
+import { CHANGE_FILE_LIST } from './action'
 
 const initialState = {
-  path: './',
   fileList: []
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'CHANGE_PATH':
+    case CHANGE_FILE_LIST:
       return Object.assign({}, state, {
-        path: action.value
+        fileList: action.value
       })
     default:
       return state
