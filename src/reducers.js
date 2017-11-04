@@ -1,7 +1,9 @@
-import { CHANGE_FILE_LIST } from './action'
+import { CHANGE_FILE_LIST, CHANGE_SELECTED, CHANGE_PATH } from './action'
 
 const initialState = {
-  fileList: []
+  filePath: '',
+  fileList: [],
+  selectList: []
 }
 
 export default (state = initialState, action) => {
@@ -9,6 +11,14 @@ export default (state = initialState, action) => {
     case CHANGE_FILE_LIST:
       return Object.assign({}, state, {
         fileList: action.value
+      })
+    case CHANGE_SELECTED:
+      return Object.assign({}, state, {
+        selectList: [...action.value]
+      })
+    case CHANGE_PATH:
+      return Object.assign({}, state, {
+        filePath: action.value
       })
     default:
       return state

@@ -5,7 +5,9 @@ import { connect } from 'react-redux'
 
 import { FETCH_FILE_LIST } from '../store/request'
 
-import { change_file_list } from '../action'
+import { change_file_list, change_path } from '../action'
+
+import { filterFileList } from '../util'
 
 class Paths extends Component {
   constructor(props) {
@@ -28,8 +30,9 @@ class Paths extends Component {
   changePath = e => {
     let newPath = this.refs.pathName.value.trim()
     if(newPath){
+      this.props.upPath(newPath)
       FETCH_FILE_LIST(newPath).then(data => {
-        this.props.upFileList(data)
+        this.props.upFileList(filterFileList(data))
       })
     }
   }
@@ -42,8 +45,11 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  upFileList: path => {
-    dispatch(change_file_list(path))
+  upFileList: data => {
+    dispatch(change_file_list(data))
+  },
+  upPath: path => {
+    dispatch(change_path(path))
   }
 })
 

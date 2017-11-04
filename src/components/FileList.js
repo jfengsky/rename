@@ -1,14 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import { change_selected, change_file_list } from '../action'
+
 class FileList extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      fileList: props.fileList
+    }
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      fileList: nextProps.fileList
+    })
+  }
+
   render() {
     let {
       fileList
-    } = this.props
+    } = this.state
     return (
       <table className="am-table am-table-striped am-table-hover">
         <thead>
@@ -20,6 +32,9 @@ class FileList extends Component {
               文件/目录名
             </td>
             <td>
+              新文件名
+            </td>
+            <td>
               大小
             </td>
             <td>
@@ -29,16 +44,22 @@ class FileList extends Component {
         </thead>
         <tbody>
           {
-            !!fileList.length && fileList.map(({ name, size, isDirectory, mtime }, index) => {
+            !!fileList.length && fileList.map(({ name, size, isDirectory, mtime, isSelect, id, newName, exName }, index) => {
+
+              let fullReName = ''
+              if (newName && exName) {
+                fullReName = `${newName}.${exName}`
+              }
               return (
                 <tr key={index}>
                   <td>
-                    <input type="checkbox" />
+                    <input type="checkbox" value={isSelect} onClick={this.clickHandlerToggle.bind(this, id)} />
                   </td>
                   <td>
                     {isDirectory && <a href="###">{name}</a>}
                     {!isDirectory && <span>{name}</span>}
                   </td>
+                  <td>{fullReName}</td>
                   <td>
                     {!isDirectory && <span>{this.formatSize(size)}</span>}
                   </td>
@@ -53,6 +74,7 @@ class FileList extends Component {
       </table>
     )
   }
+
   formatSize = data => {
     let kb = data / 1024
     let mb = kb / 1024
@@ -73,11 +95,42 @@ class FileList extends Component {
   formatDate = data => {
     return data.split('T')[0]
   }
+
+  clickHandlerToggle = id => {
+    let {
+      fileList,
+      selectList
+    } = this.props
+    fileList.map(item => {
+      if (item.id === id) {
+        item.isSelect = !item.isSelect
+      }
+    })
+
+    this.props.upFileList(fileList)
+
+    let tempSelectList = []
+    fileList.map(item => {
+      if (item.isSelect) {
+        tempSelectList.push(item)
+      }
+    })
+    this.props.upSelected(tempSelectList)
+  }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    fileList: state.fileList
+    fileList: state.fileList,
+    selectList: state.selectList
   }
 }
-export default connect(mapStateToProps)(FileList)
+const mapDispatchToProps = dispatch => ({
+  upSelected: data => {
+    dispatch(change_selected(data))
+  },
+  upFileList: data => {
+    dispatch(change_file_list(data))
+  }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(FileList)
