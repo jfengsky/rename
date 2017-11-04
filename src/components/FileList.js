@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Thead from '../container/Thead'
 
 class FileList extends Component {
   constructor(props) {
@@ -12,7 +11,22 @@ class FileList extends Component {
     } = this.props
     return (
       <table className="am-table am-table-striped am-table-hover">
-        <Thead />
+        <thead>
+          <tr>
+            <td>
+              <input type="checkbox" />
+            </td>
+            <td>
+              文件/目录名
+            </td>
+            <td>
+              大小
+            </td>
+            <td>
+              修改日期
+            </td>
+          </tr>
+        </thead>
         <tbody>
           {
             !!fileList.length && fileList.map(({ name, size, isDirectory, mtime }, index) => {
@@ -40,18 +54,18 @@ class FileList extends Component {
     )
   }
   formatSize = data => {
-    let tempSize = ''
     let kb = data / 1024
-    let mb = data / 1024 * 1024
+    let mb = kb / 1024
+    let gb = mb / 1024
     if (kb < 1) {
       return data + 'B'
     } else if (kb >= 1 && kb < 1024) {
       return Math.floor(kb) + 'KB'
     } else if (kb >= 1024) {
-      if( mb >= 1 && mb < 1024){
-        return Math.floor(kb) + 'MB'
-      } else {
-        // return Math.floor(mb) + 'MB'
+      if (mb >= 1 && mb < 1024) {
+        return Math.floor(mb) + 'MB'
+      } else if (mb >= 1024) {
+        return Math.floor(gb) + 'GB'
       }
     }
   }

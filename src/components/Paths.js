@@ -16,7 +16,7 @@ class Paths extends Component {
     return (
       <div className="am-form" >
         <div className="am-form-group">
-          <input type="text" className="am-form-field" ref='pathName' placeholder="输入目录" />
+          <input type="text" className="am-form-field" ref='pathName' defaultValue="F:\q30\w" placeholder="输入目录" />
         </div>
         <div className="am-form-group">
           <button className="am-btn am-btn-primary" onClick={this.changePath}>确定</button>
