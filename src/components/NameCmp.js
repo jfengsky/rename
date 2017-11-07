@@ -72,6 +72,8 @@ class NameCmp extends Component {
     FETCH_RENAME({
       path: this.props.filePath,
       list: param
+    }).then(data => {
+      window.location.reload()
     })
   }
 

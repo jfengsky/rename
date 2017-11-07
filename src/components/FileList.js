@@ -26,7 +26,7 @@ class FileList extends Component {
         <thead>
           <tr>
             <td>
-              <input type="checkbox" />
+              <input type="checkbox" onClick={this.clickHandlerAll} />
             </td>
             <td>
               文件/目录名
@@ -47,23 +47,23 @@ class FileList extends Component {
             !!fileList.length && fileList.map(({ name, size, isDirectory, mtime, isSelect, id, newName, exName }, index) => {
 
               let fullReName = ''
-              if (newName && exName) {
+              if (isSelect && newName && exName) {
                 fullReName = `${newName}.${exName}`
               }
               return (
                 <tr key={index}>
                   <td>
-                    <input type="checkbox" value={isSelect} onClick={this.clickHandlerToggle.bind(this, id)} />
+                    <input type="checkbox" checked={isSelect} onClick={this.clickHandlerToggle.bind(this, id)} />
                   </td>
                   <td>
                     {isDirectory && <a href="###">{name}</a>}
                     {!isDirectory && <span>{name}</span>}
                   </td>
-                  <td>{fullReName}</td>
-                  <td>
+                  <td style={{width: '20%'}}>{fullReName}</td>
+                  <td style={{width: '10%'}}>
                     {!isDirectory && <span>{this.formatSize(size)}</span>}
                   </td>
-                  <td>
+                  <td style={{width: '15%'}}>
                     {this.formatDate(mtime)}
                   </td>
                 </tr>
@@ -94,6 +94,30 @@ class FileList extends Component {
 
   formatDate = data => {
     return data.split('T')[0]
+  }
+
+  clickHandlerAll = e => {
+    let {
+      fileList,
+      selectList
+    } = this.props
+    if (e.target.checked) {
+      fileList.map(item => {
+        item.isSelect = true
+      })
+      selectList = [...fileList]
+      
+    } else {
+      fileList.map(item => {
+        item.isSelect = false
+        item.newName = ''
+        item.exName = ''
+      })
+      selectList = []
+    }
+    this.props.upFileList(fileList)
+    this.props.upSelected(selectList)
+
   }
 
   clickHandlerToggle = id => {

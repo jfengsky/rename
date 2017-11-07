@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case CHANGE_FILE_LIST:
       return Object.assign({}, state, {
-        fileList: action.value
+        fileList: [...action.value]
       })
     case CHANGE_SELECTED:
       return Object.assign({}, state, {
